@@ -1,6 +1,7 @@
 import csvParser from 'csv-parser'
 import { CsvFile } from '../models/csvFile.js'
 
+/* Handle the upload of the CSV file and store in the database */
 export const uploadCsv = async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded' })
@@ -15,6 +16,7 @@ export const uploadCsv = async (req, res) => {
   const fileData = req.file.buffer.toString('utf8');
   const parsedData = [];
 
+  // Parse the CSV data
   const parseCsv = () => {
     return new Promise((resolve, reject) => {
       const stream = csvParser({ header: true })
@@ -51,7 +53,7 @@ export const uploadCsv = async (req, res) => {
   }
 };
 
-
+/* To send all the CSV files present in the database */
 export const csvFilesList = async (req, res) => {
   try {
     const files = await CsvFile.find({}, 'name');
@@ -62,6 +64,7 @@ export const csvFilesList = async (req, res) => {
   }
 }
 
+/* To get the requested CSV file's data */
 export const getCsvFileData = async (req, res) => {
   const fileId = req.params.fileId
   const { page = 1, limit = 10, search} = req.query
@@ -86,6 +89,7 @@ export const getCsvFileData = async (req, res) => {
 
     const paginatedData = filteredData.slice(startIndex, endIndex)
 
+    // Return the filtered data
     return res.json({
       name: fileName,
       totalRecords: filteredData.length,
@@ -99,6 +103,7 @@ export const getCsvFileData = async (req, res) => {
   }
 }
 
+/* To delete the CSV file */
 export const deleteCsvFile = async (req, res) => {
   const fileId = req.params.id
   try {

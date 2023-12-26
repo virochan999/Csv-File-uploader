@@ -9,13 +9,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const prevPageButton = document.getElementById('prevPageButton')
   const paginationData = document.querySelector('.pagination-data')
   const paginationWrapper = document.querySelector('.pagination-wrapper')
+  const fileListText = document.querySelector('#fileListText')
 
+  /* Fetch all the list of the available CSV files in database */
   const fetchFileList = async () => {
     try {
       const response = await fetch('https://fair-puce-scallop-hose.cyclic.app/upload/list')
       const fileList = await response.json()
 
-      fileListContainer.innerHTML = '' 
+      if(fileList.length === 0) {
+        fileListText.innerHTML = 'No files found'
+        return
+      }
+      fileListContainer.innerHTML = ''
 
       // Populate the file list container with links or buttons to select files
       fileList.forEach((file) => {
@@ -46,14 +52,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  fetchFileList()
+  fetchFileList() // fetch file list
 
+  /* Function to handle file upload to the database */
   uploadForm.addEventListener('submit', async(event) => {
     event.preventDefault()
 
     const fileInput = document.getElementById('file_input')
     const file = fileInput.files[0]
 
+    // If file is present, validate the csv extension
     if(file) {
       const allowedExtentions = ['csv']
       const fileExtension = file.name.slice(((file.name.lastIndexOf('.')-1) >>> 0) + 2)
@@ -71,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
       formData.append('csvFile', file)
 
       try{
+        // Call API to upload the file
         const response = await fetch('https://fair-puce-scallop-hose.cyclic.app/upload', {
           method: 'POST',
           body: formData
@@ -152,10 +161,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const fileId = params.get('fileId')
   const page = parseInt(params.get('page'), 10)
   const search = params.get('search') || ''
+  // Fetch the data on the page load request
   if (fileId) {
     fetchAndDisplayCsvData(fileId, page, search)
   }
 
+  // Handle the browser back and forword button to display correct data based on URL
   window.addEventListener('popstate', () => {
     const params = new URLSearchParams(window.location.search)
     const fileId = params.get('fileId')
@@ -182,6 +193,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const searchInput = document.getElementById('searchInput')
   const searchBtn = document.getElementById('searchBtn')
+
+  /* Add a click event to the search button */
   searchBtn.addEventListener('click', (e) => {
     e.preventDefault()
     updateUrl()
@@ -195,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
     searchTerm = searchInput.value.toLowerCase()
   }
 
+  /* Update the URL based on the data request */
   const updateUrl = () => {
     const searchParams = new URLSearchParams()
     searchParams.set('fileId', currentFileId)
@@ -208,6 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.history.replaceState({}, '', newUrl)
   }
 
+  /* Function to handle the display of the data of the files in table form */
   const displayData = (csvData) => {
     try {
       // Create a dynamic table with headers and rows
@@ -342,12 +357,14 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 
+  /* Handle pagination for next button click */
   nextPageButton.addEventListener('click', () => {
     currentPage += 1
     updateUrl()
     fetchAndDisplayCsvData(currentFileId, currentPage, searchTerm)
   })
   
+  /* Handle pagination for previous button click */
   prevPageButton.addEventListener('click', () => {
     if (currentPage > 1) {
       currentPage -= 1

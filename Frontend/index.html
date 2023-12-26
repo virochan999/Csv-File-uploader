@@ -35,7 +35,11 @@
       <div class="flex justify-center mt-20">
         <h2 class="font-bold text-xl uppercase">List of available csv files</h2>
       </div>
-      <div id="fileList" class="grid grid-cols-3 w-[90%] m-auto mt-8 gap-4 shadow-[rgba(99,99,99,0.2)_0px_2px_8px_0px] p-5"></div>
+      <div id="fileList" class="grid grid-cols-3 w-[90%] m-auto mt-8 gap-4 shadow-[rgba(99,99,99,0.2)_0px_2px_8px_0px] p-5 relative">
+        <div role="status" class="absolute text-center w-full h-full flex justify-center items-center">
+          <span id="fileListText" class="text-black font-bold">Loading...</span>
+        </div>
+      </div>
       <div id="searchWrapper" class="my-10 hidden">
         <form class="flex w-2/6">   
           <div class="relative w-full">
