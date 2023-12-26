@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const fetchFileList = async () => {
     try {
-      const response = await fetch('http://localhost:5000/upload/list')
+      const response = await fetch('https://fair-puce-scallop-hose.cyclic.app/upload/list')
       const fileList = await response.json()
 
       fileListContainer.innerHTML = '' 
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
       formData.append('csvFile', file)
 
       try{
-        const response = await fetch('http://localhost:5000/upload', {
+        const response = await fetch('https://fair-puce-scallop-hose.cyclic.app/upload', {
           method: 'POST',
           body: formData
         })
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* Function to handle deletion of a CSV file */
   const deleteCsvFile = async(id) => {
     try {
-      const response = await fetch(`http://localhost:5000/upload/delete/${id}`, { method: 'DELETE' })
+      const response = await fetch(`https://fair-puce-scallop-hose.cyclic.app/upload/delete/${id}`, { method: 'DELETE' })
       const result = await response.json()
       Toastify({
         text: `${result.message}`,
@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Update the fetchAndDisplayCsvData function
   const fetchAndDisplayCsvData = async (fileId, page = 1, search = '') => {
     try {
-      let apiUrl = `http://localhost:5000/upload/${fileId}?page=${page}&limit=${recordsPerPage}`
+      let apiUrl = `https://fair-puce-scallop-hose.cyclic.app/upload/${fileId}?page=${page}&limit=${recordsPerPage}`
       if(search.trim() !== '') {
         apiUrl += `&search=${search}`
       }
