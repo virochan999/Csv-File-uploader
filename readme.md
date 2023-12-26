@@ -46,12 +46,10 @@ This is a web application that allows users to upload CSV files, display a list 
 ## Getting Started
 
 1. Clone the repository:
-
-   ```
-   git clone https://github.com/virochan999/Csv-File-uploader.git
-   cd Csv-File-uploader
-
-   ```
+  ```
+  git clone https://github.com/virochan999/Csv-File-uploader.git
+  cd Csv-File-uploader
+  ```
 2. For Frontend:
   ```
   cd Frontend

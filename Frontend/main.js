@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   let currentPage = 1
   let currentFileId
+  let totalPages
   const recordsPerPage = 10
   let searchTerm = ''
   const uploadForm = document.getElementById('uploadForm')
@@ -144,6 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = await fetch(apiUrl)
       currentData  = await response.json()
       headerData = currentData.data.length !== 0 ? currentData.data[0] : {}
+      totalPages = currentData.data.length !== 0 ? currentData.totalPages : 0
       paginationData.innerHTML = `${currentData.currentPage} of ${currentData.totalPages}`
       if(currentData.data.length > 0) {
         paginationWrapper.classList.add('opacity-100')
@@ -359,9 +361,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* Handle pagination for next button click */
   nextPageButton.addEventListener('click', () => {
-    currentPage += 1
-    updateUrl()
-    fetchAndDisplayCsvData(currentFileId, currentPage, searchTerm)
+    if (currentPage < totalPages) {
+      currentPage += 1
+      updateUrl()
+      fetchAndDisplayCsvData(currentFileId, currentPage, searchTerm)
+    }
   })
   
   /* Handle pagination for previous button click */
